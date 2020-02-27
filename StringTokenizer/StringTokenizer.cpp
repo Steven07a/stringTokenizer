@@ -61,8 +61,6 @@ int main()
         cout << "token: " << token << endl;
     }
 
-    
-
     return 0;
 
 }
