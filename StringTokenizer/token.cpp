@@ -1,0 +1,46 @@
+#include "token.h"
+#include <iostream>
+
+using namespace std;
+
+Token::Token(string str, int type) {
+	_token = str;
+	_type = type;
+}
+
+string Token::token_str() {
+	return _token;
+}
+
+string Token::type_string() {
+	switch (_type) {
+	case Number:
+		return "Number";
+		break;
+	case Symbol:
+		return "Unknown";
+		break;
+	case Word:
+		return "Alpha";
+		break;
+	case Space:
+		return "Space";
+		break;
+	case Garbage:
+		return "Garbage";
+		break;
+	default:
+		return "Unknown";
+		break;
+	}
+}
+
+int Token::type() {
+	return _type;
+}
+
+ostream& operator<<(ostream& outs, Token& t) {
+	outs << t.type_string() << "\t" << t.token_str() << endl;
+	return outs;
+}
+
