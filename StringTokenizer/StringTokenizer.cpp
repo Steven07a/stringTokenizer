@@ -2,6 +2,8 @@
 //
 
 #include <iostream>
+#include "STokenizer.h"
+#include "token.h"
 using namespace std;
 
 bool getToken(char c[] , const int ROW, int table[][127], char*& position, int &currentState, char*& token, const int BUFFER) {
@@ -36,6 +38,9 @@ bool getToken(char c[] , const int ROW, int table[][127], char*& position, int &
 
 int main()
 {    
+    Token t;
+    STokenizer ss;
+    
     const int ROW = 4, COLUMN = 127, BUFFER = 17;
     int table[ROW][COLUMN], state = 0;
     char ch[] = "aaaaaaaabcaaaaaaa";

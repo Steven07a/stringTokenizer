@@ -147,7 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="STokenizer.cpp" />
     <ClCompile Include="StringTokenizer.cpp" />
+    <ClCompile Include="token.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="STokenizer.h" />
+    <ClInclude Include="token.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

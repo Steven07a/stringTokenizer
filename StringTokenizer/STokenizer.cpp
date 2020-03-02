@@ -1,9 +1,9 @@
 #include "STokenizer.h"
 
 STokenizer::STokenizer() {
-	_buffer[0] = '\0';
+	_buffer[MAX_BUFFER] = { NULL };
 	_pos = 0;
-	make_table(_table);
+	make_table(STokenizer::_table);
 }
 
 STokenizer::STokenizer(char str[]) {
@@ -11,7 +11,7 @@ STokenizer::STokenizer(char str[]) {
 	for (int i = 0; str[i] != NULL; i++) {
 		_buffer[i] = str[i];
 	}
-	make_table(_table);
+	make_table(STokenizer::_table);
 }
 
 bool STokenizer::done() {
@@ -31,23 +31,24 @@ void STokenizer::set_string(char str[]) {
 void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 0; j < MAX_COLUMNS; j++) {
-			_table[i][j] = -1;
+			STokenizer::_table[i][j] = -1;
 		}
 	}
 	//sets all numbers =  to NUMBER enum
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 48; j < 58; j++) {
-			_table[i][j] = Number;
+			STokenizer::_table[i][j] = Number;
 		}
 	}
 
 	//sets all Alpha  =  to Word enum
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 65; j < 91; j++) {
-			_table[i][j] = Word;
-			_table[i + 32][j + 32] = Word;
+			STokenizer::_table[i][j] = Word;
+			STokenizer::_table[i][j + 32] = Word;
 		}
 	}
+
 }
 
 bool STokenizer::get_token(int start_state, string& token) {

@@ -36,7 +36,7 @@ private:
     //---------------------------------
     char _buffer[MAX_BUFFER];       //input string
     int _pos;                       //current position in the string
-    static int _table[MAX_ROWS][MAX_COLUMNS];
+    int _table[MAX_ROWS][MAX_COLUMNS];
 };
 #endif // !stringTokenizer_H_
 
