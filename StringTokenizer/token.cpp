@@ -43,8 +43,8 @@ int Token::type() {
 	return _type;
 }
 
-ostream& operator<<(ostream& outs, Token& t) {
-	outs << t.type_string() << "\t" << t.token_str() << endl;
+ostream& operator<<(ostream& outs, const Token& t) {
+	outs << "|" << t._token << "|" ;
 	return outs;
 }
 

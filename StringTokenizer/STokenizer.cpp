@@ -1,25 +1,26 @@
 #include "STokenizer.h"
 
+int STokenizer::_table[MAX_ROWS][MAX_COLUMNS];
+
 STokenizer::STokenizer() {
-	_buffer[MAX_BUFFER] = { NULL };
+	_buffer[MAX_BUFFER] = { '\0' };
 	_pos = 0;
-	make_table(STokenizer::_table);
+	make_table(_table);
 }
 
 STokenizer::STokenizer(char str[]) {
+	_buffer[MAX_BUFFER] = { '\0' };
 	_pos = 0;
-	for (int i = 0; str[i] != NULL; i++) {
-		_buffer[i] = str[i];
-	}
-	make_table(STokenizer::_table);
+	set_string(str);
+	make_table(_table);
 }
 
 bool STokenizer::done() {
-	return (_buffer[_pos] == NULL ? true : false);
+	return (_buffer[_pos] > 0 ? true : false);
 }
 
 bool STokenizer::more() {
-	return (_buffer[_pos] != NULL ? true : false);
+	return (_buffer[_pos] > 0 ? true : false);
 }
 
 void STokenizer::set_string(char str[]) {
@@ -31,46 +32,81 @@ void STokenizer::set_string(char str[]) {
 void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 0; j < MAX_COLUMNS; j++) {
-			STokenizer::_table[i][j] = -1;
+			_table[i][j] = -1;
 		}
 	}
 	//sets all numbers =  to NUMBER enum
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 48; j < 58; j++) {
-			STokenizer::_table[i][j] = Number;
+			_table[i][j] = Number;
 		}
 	}
 
 	//sets all Alpha  =  to Word enum
 	for (int i = 0; i < MAX_ROWS; i++) {
 		for (int j = 65; j < 91; j++) {
-			STokenizer::_table[i][j] = Word;
-			STokenizer::_table[i][j + 32] = Word;
+			_table[i][j] = Word;
+			_table[i][j + 32] = Word;
 		}
 	}
+
+	//sets Spaces to space enum
+	for (int i = 0; i < MAX_ROWS; i++) {
+		_table[i][32] = Space;
+	}
+
+	//sets all unknown/symbol  =  to symbol enum
+	for (int i = 0; i < MAX_ROWS; i++) {
+		for (int j = 33; j < 48; j++) {
+			_table[i][j] = Symbol;
+		}
+	}
+	for (int i = 0; i < MAX_ROWS; i++) {
+		for (int j = 58; j < 65; j++) {
+			_table[i][j] = Symbol;
+		}
+	}
+	for (int i = 0; i < MAX_ROWS; i++) {
+		for (int j = 123; j < 127; j++) {
+			_table[i][j] = Symbol;
+		}
+	}
+
 
 }
 
 bool STokenizer::get_token(int start_state, string& token) {
-	int new_state = start_state, pass = -1, count = 0;
+	start_state = _table[start_state][_buffer[_pos]];
+	int new_state = start_state, startingPos = _pos;
+	token.clear();
 	while (new_state == start_state) {
-		if (_pos > token.size()) {
-			break;
-		}
 		//sets the state equal to the state we get from the table
-		new_state = _table[new_state][token[_pos]];
-		if (_table[new_state][0] == Word) {
-			pass = _pos;
+		if (_buffer[_pos] > 0) {
+			new_state = _table[new_state][_buffer[_pos]];
+		} else {
+			new_state = -1;
 		}
-		_pos++;
-	}
-	//this helps us keep track of where we ended and gives us the state we ended in
-	_pos = pass + 1;
-	start_state = new_state;
 
-	while (count <= pass) {
-		_buffer[count] = token[count];
-		count++;
+		if (new_state == start_state) {
+			_pos++;
+		} else if (new_state == Symbol && _table[new_state][_buffer[_pos + 1]] == Number 
+			&& _buffer[_pos + 1] > 0) {
+			new_state = Number;
+			_pos++;
+		}
 	}
-	return (pass >= 0);
+
+	while (startingPos < _pos) {
+		token.push_back(_buffer[startingPos]);
+		startingPos++;
+	}
+	return (token != "");
+}
+
+STokenizer& operator>>(STokenizer& s, Token& t) {
+	string temp = "";
+	if (s.get_token(t.type(), temp)) {
+		t = Token(temp, s._table[0][temp[0]]);
+	}
+	return s;
 }
