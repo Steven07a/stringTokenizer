@@ -9,10 +9,20 @@ STokenizer::STokenizer() {
 }
 
 STokenizer::STokenizer(char str[]) {
+	_stringSize = strlen(str);
 	_buffer[MAX_BUFFER] = { '\0' };
 	_pos = 0;
 	set_string(str);
 	make_table(_table);
+}
+
+void STokenizer::set_table(int start, int end, int value) {
+	//sets all numbers =  to NUMBER enum
+	for (int i = 0; i < MAX_ROWS; i++) {
+		for (int j = start; j < end+1; j++) {
+			_table[i][j] = value;
+		}
+	}
 }
 
 bool STokenizer::done() {
@@ -20,7 +30,7 @@ bool STokenizer::done() {
 }
 
 bool STokenizer::more() {
-	return (_buffer[_pos] > 0 ? true : false);
+	return (_pos <= _stringSize+1);
 }
 
 void STokenizer::set_string(char str[]) {
@@ -30,49 +40,24 @@ void STokenizer::set_string(char str[]) {
 }
 
 void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 0; j < MAX_COLUMNS; j++) {
-			_table[i][j] = -1;
-		}
-	}
+	//sets default value to -1
+	set_table(0, MAX_COLUMNS, -1);
+
 	//sets all numbers =  to NUMBER enum
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 48; j < 58; j++) {
-			_table[i][j] = Number;
-		}
-	}
+	set_table(48, 57, Number);
 
 	//sets all Alpha  =  to Word enum
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 65; j < 91; j++) {
-			_table[i][j] = Word;
-			_table[i][j + 32] = Word;
-		}
-	}
+	set_table(65, 90, Word);
+	set_table(97, 123, Word);
 
 	//sets Spaces to space enum
-	for (int i = 0; i < MAX_ROWS; i++) {
-		_table[i][32] = Space;
-	}
+	set_table(32, 32, Space);
 
 	//sets all unknown/symbol  =  to symbol enum
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 33; j < 48; j++) {
-			_table[i][j] = Symbol;
-		}
-	}
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 58; j < 65; j++) {
-			_table[i][j] = Symbol;
-		}
-	}
-	for (int i = 0; i < MAX_ROWS; i++) {
-		for (int j = 123; j < 127; j++) {
-			_table[i][j] = Symbol;
-		}
-	}
-
-
+	set_table(33, 47, Symbol);
+	set_table(58, 64, Symbol);
+	set_table(91, 96, Symbol);
+	set_table(123, 126, Symbol);
 }
 
 bool STokenizer::get_token(int start_state, string& token) {
@@ -99,6 +84,9 @@ bool STokenizer::get_token(int start_state, string& token) {
 	while (startingPos < _pos) {
 		token.push_back(_buffer[startingPos]);
 		startingPos++;
+	}
+	if (new_state == -1) {
+		_pos++;
 	}
 	return (token != "");
 }

@@ -25,6 +25,9 @@ public:
     //set a new string as the input string
     void set_string(char str[]);
 
+    //sets the columns for the table
+    void set_table(int start, int end, int value);
+
 private:
     //create table for all the tokens we will recognize
     //                      (e.g. doubles, words, etc.)
@@ -37,6 +40,7 @@ private:
     char _buffer[MAX_BUFFER];       //input string
     int _pos;                       //current position in the string
     static int _table[MAX_ROWS][MAX_COLUMNS];
+    int _stringSize;
 };
 #endif // !stringTokenizer_H_
 
