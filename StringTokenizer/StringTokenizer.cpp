@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {    
-    char s[] = "it was the night of october 17th.asd pi was still 3.14. asdlaskd..()?<>;':[]{}|+_=-)(*&^%$#@!~`aosidnoi aosdinoasdioias saodin ";
+    char s[] = " holá como estas";
     Token t;
     STokenizer stk(s);
 
@@ -21,6 +21,7 @@ int main()
         t = Token();
         stk >> t;
     }
+
 
     return 0;
 }

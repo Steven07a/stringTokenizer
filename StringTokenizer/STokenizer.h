@@ -5,9 +5,9 @@
 #include "token.h"
 using namespace std; 
 
-#define MAX_COLUMNS 127
-#define MAX_ROWS 4
-#define MAX_BUFFER 0x100
+#define MAX_COLUMNS 128
+#define MAX_ROWS 10
+#define MAX_BUFFER 1000
 
 class STokenizer
 {
@@ -26,7 +26,7 @@ public:
     void set_string(char str[]);
 
     //sets the columns for the table
-    void set_table(int start, int end, int value);
+    void set_table(int sRows, int eRows, int sCol, int eCol, int value);
 
 private:
     //create table for all the tokens we will recognize
