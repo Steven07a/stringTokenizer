@@ -1,7 +1,8 @@
 #include "STokenizer.h"
-#include "C:\Users\Steven_Dev\Desktop\CS_Stuff\includes/table.h"
+#include "C:/Users/Steven_Dev/Desktop/CS_Stuff/includes/table.h"
 
 int STokenizer::_table[MAX_ROWS][MAX_COLUMNS];
+
 
 STokenizer::STokenizer() {
 	set_string('\0');
@@ -70,7 +71,11 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	set_table(10, 10, 0, 0, 1);
 
 	//sets all unknown/symbol  =  to symbol enum
-	set_table(0, 0, 33, 46, Symbol);
+	mark_cells(_table, 0, 0, "\"(){}:';[]/,.<>*&^%$#@!_+-=`~?", Symbol);
+	mark_cells(_table, 4, 6, "\"(){}:';[]/,.<>*&^%$#@!_+-=`~?", Symbol);
+	mark_cells(_table, 4, 4, 0, 0, 1);
+	mark_cells(_table, 5, 5, 0, 0, 0);
+	/*set_table(0, 0, 33, 46, Symbol);
 	set_table(0, 0, 58, 64, Symbol);
 	set_table(0, 0, 91, 96, Symbol);
 	set_table(0, 0, 123, 126, Symbol);
@@ -79,7 +84,7 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	set_table(4, 6, 91, 96, Symbol);
 	set_table(4, 6, 123, 126, Symbol);
 	set_table(4, 4, 0, 0, 1);
-	set_table(5, 5, 0, 0, 0);
+	set_table(5, 5, 0, 0, 0);*/
 }
 
 bool STokenizer::get_token(int start_state, string& token) {

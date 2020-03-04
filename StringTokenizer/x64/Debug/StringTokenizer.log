@@ -1,2 +1,6 @@
-﻿  token.cpp
-  StringTokenizer.vcxproj -> C:\Users\Steven_Dev\Desktop\CS_Stuff\stringTokenizer\stringTokenizer\x64\Debug\StringTokenizer.exe
+﻿  table.cpp
+  STokenizer.cpp
+C:\Users\Steven_dev\Desktop\CS_Stuff\stringTokenizer\StringTokenizer\STokenizer.cpp(14,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\Steven_dev\Desktop\CS_Stuff\stringTokenizer\StringTokenizer\STokenizer.cpp(38,27): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+  StringTokenizer.vcxproj -> C:\Users\Steven_dev\Desktop\CS_Stuff\stringTokenizer\StringTokenizer\x64\Debug\StringTokenizer.exe

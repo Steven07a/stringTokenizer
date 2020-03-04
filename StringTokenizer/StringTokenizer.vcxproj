@@ -147,11 +147,13 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\includes\table.cpp" />
     <ClCompile Include="STokenizer.cpp" />
     <ClCompile Include="StringTokenizer.cpp" />
     <ClCompile Include="token.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\includes\table.h" />
     <ClInclude Include="STokenizer.h" />
     <ClInclude Include="token.h" />
   </ItemGroup>
