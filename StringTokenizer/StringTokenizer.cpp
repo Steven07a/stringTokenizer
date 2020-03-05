@@ -10,7 +10,7 @@ using namespace std;
 
 int main()
 {    
-    char s[] = " holá como estas";
+    char s[] = "holá como estasó123 aa bgú¿ñíasldk 1.23";
     Token t;
     STokenizer stk(s);
 
