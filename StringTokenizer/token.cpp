@@ -25,13 +25,13 @@ string Token::type_string() {
 		return "Unknown";
 		break;
 	case Word:
-		return "Alpha";
+		return "ALPHA";
 		break;
 	case Space:
 		return "Space";
 		break;
-	case Garbage:
-		return "Garbage";
+	case Puncuation:
+		return "Puncuation";
 		break;
 	default:
 		return "Unknown";

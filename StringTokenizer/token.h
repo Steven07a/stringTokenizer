@@ -4,7 +4,7 @@
 #include <string>
 using namespace std;
 
-enum Type { Number = 1, Symbol = 4, Word = 7, Space = 10, Garbage };
+enum Type { Number = 1, Symbol = 4, Word = 7, Space = 10, Puncuation = 11 };
 
 class Token
 {

@@ -6,8 +6,8 @@
 using namespace std; 
 
 #define MAX_COLUMNS 128
-#define MAX_ROWS 10
-#define MAX_BUFFER 1000
+#define MAX_ROWS 12
+#define MAX_BUFFER 500
 
 class STokenizer
 {
@@ -24,9 +24,6 @@ public:
 
     //set a new string as the input string
     void set_string(char str[]);
-
-    //sets the columns for the table
-    void set_table(int sRows, int eRows, int sCol, int eCol, int value);
 
 private:
     //create table for all the tokens we will recognize

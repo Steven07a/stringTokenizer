@@ -5,7 +5,7 @@ int STokenizer::_table[MAX_ROWS][MAX_COLUMNS];
 
 
 STokenizer::STokenizer() {
-	set_string('\0');
+	set_string(0);
 	_pos = 0;
 	make_table(_table);
 }
@@ -17,15 +17,6 @@ STokenizer::STokenizer(char str[]) {
 	make_table(_table);
 }
 
-void STokenizer::set_table(int sRows, int eRows, int sCol, int eCol, int value) {
-	//sets all numbers =  to NUMBER enum
-	for (int i = sRows; i < eRows+1; i++) {
-		for (int j = sCol; j < eCol+1; j++) {
-			_table[i][j] = value;
-		}
-	}
-}
-
 bool STokenizer::done() {
 	return (_pos <= _stringSize);
 }
@@ -35,14 +26,22 @@ bool STokenizer::more() {
 }
 
 void STokenizer::set_string(char str[]) {
-	_stringSize = strlen(str);
+	char* strP = str;
+	if (strP != NULL) {
+		_stringSize = strlen(str);
+	} else {
+		_stringSize = 0;
+	}
 	_pos = 0;
-	for (int i = 0; i < MAX_BUFFER; i++) {
-		_buffer[i] = 0;
+	if (strP != NULL) {
+		for (int i = 0; str[i] != NULL; i++) {
+			_buffer[i] = str[i];
+			if (str[i + 1] == NULL) {
+				_buffer[i + 1] = 0;
+			}
+		}
 	}
-	for (int i = 0; str[i] != NULL; i++) {
-		_buffer[i] = str[i];
-	}
+	
 }
 
 void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
@@ -55,7 +54,8 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	mark_cells(_table, 0, 0, ' ', ' ', Space);
 	mark_cells(_table, 0, 0, 'A', 'Z', Word);
 	mark_cells(_table, 0, 0, 'a', 'z', Word);
-	mark_cells(_table, 0, 0, "\"(){}:';[]/,.<>*&^%$#@!_+-=`~?", Symbol);
+	mark_cells(_table, 0, 0, "<>*&^%$#@_+-=~", Symbol);
+	mark_cells(_table, 0, 0, "\"';:{}[](),.?/!", Puncuation);
 
 	//row 1-3 reserved for number 1 pass, 2 neutral, 3 fail
 	mark_cells(_table, 1, 3, '0', '9', Number);
@@ -74,34 +74,52 @@ void STokenizer::make_table(int _table[][MAX_COLUMNS]) {
 	mark_cells(_table, 10, 10, 0, 0, 1);
 
 	//row 4-6 reserved for symbols 4 pass, 5 neutral, 6 fail
-	mark_cells(_table, 4, 6, "\"(){}:';[]/,.<>*&^%$#@!_+-=`~?", Symbol);
+	mark_cells(_table, 4, 6, "<>*&^%$#@_+-=~", Symbol);
 	mark_cells(_table, 4, 4, 0, 0, 1);
 	mark_cells(_table, 5, 5, 0, 0, 0);
+
+	//row 11 reserved for puncuation always a pass.
+	mark_cells(_table, 11, 11, "\"';:{}[](),.?/!", Puncuation);
+	mark_cells(_table, 11, 11, 0, 0, 1);
 }
 
 bool STokenizer::get_token(int start_state, string& token) {
-	start_state = _table[start_state][_buffer[_pos]];
-	int new_state = start_state, startingPos = _pos, pass = _pos;
-	token.clear();
+	if (_buffer[_pos] > 0) {
+		//123 aa b
+		start_state = _table[start_state][_buffer[_pos]];
+	} else {
+		start_state = 0;
+	}
 
+	int new_state = start_state, startingPos = _pos, pass = _pos;
+
+	//while state is a not a fail state and  
+	//currrent state is not a fail state continue looping
 	while (_table[new_state][0] != -1 && new_state != -1) {
 		if (_buffer[_pos] == 0) {
 			break;
 		}
 		new_state = _table[new_state][_buffer[_pos]];
+		//1 is considered a pass state so if our current state is
+		//a pass then we save that position separatly
 		if (_table[new_state][0] == 1) {
 			pass = _pos;
 		}
 		_pos++;
 	}
 
+	//this returns us to the last pass state and adds one so that 
+	//we are on the next character
 	_pos = pass + 1;
 
-	while (startingPos < _pos && _buffer[startingPos] > 0) {
+	//add characters to the token one by one 
+	while (startingPos < _pos) {
 		token.push_back(_buffer[startingPos]);
 		startingPos++;
 	}
 	
+	//if the token is blank that means we didnt find any character 
+	//so it returns false
 	return (token != "");
 }
 
@@ -110,5 +128,6 @@ STokenizer& operator>>(STokenizer& s, Token& t) {
 	if (s.get_token(t.type(), temp)) {
 		t = Token(temp, s._table[0][temp[0]]);
 	}
+
 	return s;
 }
